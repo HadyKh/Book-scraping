@@ -57,4 +57,4 @@ ipython_config.py
 env/
 
 # cache
-src/__pycache__/utils.cpython-310.pyc
+__pycache__/
