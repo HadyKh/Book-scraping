@@ -1,12 +1,8 @@
-import os
 import pandas as pd
-from dotenv import load_dotenv
 
 from utils import scrape_category
 
-load_dotenv()
-
-BASE_URL = os.getenv("Book_URL")
+BASE_URL = "https://books.toscrape.com/catalogue/category/books/"
 CATEGORIES = {
     "travel": "travel_2/index.html",
     "mystery": "mystery_3/index.html",
