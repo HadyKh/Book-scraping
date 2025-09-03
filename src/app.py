@@ -27,5 +27,18 @@ def main():
         st.subheader("Justification")
         st.info(result["justification"])
     
+    # Bonus: Ad-hoc query (simple keyword search in dataset)
+    st.write("---")
+    st.subheader("🔍 Bonus: Quick Data Lookup")
+    query = st.text_input("Search for books by title:")
+
+    if query:
+        df = qa.df  # access raw dataframe
+        matches = df[df["title"].str.contains(query, case=False, na=False)]
+        if matches.empty:
+            st.warning("No books found.")
+        else:
+            st.write(matches[["title", "category", "price", "availability", "stock_count"]].head(10))
+    
 if __name__ == "__main__":
     main()
