@@ -1,8 +1,5 @@
-import sys
 import pandas as pd
 from pathlib import Path
-
-# sys.path.append(str(Path(__file__).resolve().parents[2]))
 
 from .categorical import CategoricalAnalysis
 from .numerical import NumericalAnalysis
