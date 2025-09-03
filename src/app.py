@@ -15,9 +15,10 @@ def main():
     questions = qa.get_questions()
     q_map = {q["description"]: q["id"] for q in questions}
 
-    selected_desc = st.selectbox("Select a question:", list(q_map.keys()))
+    options = ["Tap to select a question..."] + list(q_map.keys())
+    selected_desc = st.selectbox("Select a question:", options)
 
-    if selected_desc:
+    if selected_desc and selected_desc != "Tap to select a question...":
         qid = q_map[selected_desc]
         result = qa.answer_question(qid)
 
@@ -26,8 +27,10 @@ def main():
 
         st.subheader("Justification")
         st.info(result["justification"])
+    else:
+        st.info("👆 Select a question from the dropdown above to see the answer and analysis.")
     
-    # Bonus: Ad-hoc query (simple keyword search in dataset)
+    # Bonus: Ad-hoc query feature (search for a book by title)
     st.write("---")
     st.subheader("🔍 Bonus: Quick Data Lookup")
     query = st.text_input("Search for books by title:")
