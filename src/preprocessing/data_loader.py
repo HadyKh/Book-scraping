@@ -73,8 +73,7 @@ class DataLoader:
 
         availability_data = self.df["availability"].apply(self.parse_availability)
         self.df["availability_status"] = availability_data.apply(lambda x: x[0])
-        self.df["stock_count"] = availability_data.apply(lambda x: x[1])
-
+        
         self.df["description"] = self.df["description"].apply(self.clean_description)
         self.df["rating"] = self.df["rating"].apply(self.normalize_rating)
 

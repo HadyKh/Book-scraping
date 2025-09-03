@@ -52,9 +52,9 @@ def scrape_category(category_name: str, category_url: str, base_url: str) -> lis
                 article.select_one("p.star-rating")["class"]
             )
 
-            # Follow link to get description
+            # Follow link to get description and stock count
             book_url = urljoin(url, article.h3.a["href"])
-            desc = scrape_book_description(book_url)
+            description, availability_raw, stock_count = scrape_book_detail(book_url)
 
             books.append(
                 {
@@ -62,8 +62,10 @@ def scrape_category(category_name: str, category_url: str, base_url: str) -> lis
                     "category": category_name,
                     "price": price,
                     "availability": availability,
+                    "stock_count": stock_count, 
                     "rating": rating,
-                    "description": desc,
+                    "description": description,
+                    "url": book_url,
                 }
             )
 
@@ -75,10 +77,39 @@ def scrape_category(category_name: str, category_url: str, base_url: str) -> lis
         else:
             url = None
 
-        time.sleep(1)  # Be polite
+        time.sleep(1)
 
     return books
 
+def scrape_book_detail(book_url: str) -> tuple[str, int, str]:
+    """Scrape description and availability (with numeric count) from detail page."""
+    response = requests.get(book_url)
+    response.raise_for_status()
+
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    # Description
+    desc_elem = soup.select_one("#product_description ~ p")
+    description = desc_elem.get_text(strip=True) if desc_elem else ""
+
+    # Availability is in the product info table
+    availability_raw = ""
+    stock_count = 0
+    rows = soup.select("table.table.table-striped tr")
+    for row in rows:
+        header = row.find("th")
+        if header and header.get_text(strip=True) == "Availability":
+            availability_raw = row.find("td").get_text(strip=True)
+            # Normalize whitespace
+            availability_raw = re.sub(r"\s+", " ", availability_raw)
+            # Extract digits
+            match = re.search(r"(\d+)", availability_raw)
+            stock_count = int(match.group(1)) if match else 0
+            break
+
+    return description, availability_raw, stock_count
+
+# Getting just description (Updated with the function above 'scrape_book_detail')
 def scrape_book_description(book_url: str) -> str:
     """Scrape the book description from detail page."""
     response = requests.get(book_url)
