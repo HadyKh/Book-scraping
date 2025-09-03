@@ -10,6 +10,7 @@ def main():
 
     # Initialize engine
     qa = QuestionAnswerer()
+    df = qa.get_dataframe()
 
     # Dropdown for questions
     questions = qa.get_questions()
@@ -42,6 +43,44 @@ def main():
             st.warning("No books found.")
         else:
             st.write(matches[["title", "category", "price", "availability", "stock_count"]].head(10))
+
+    st.write("---")
+    st.subheader("Filter Books by category")
+    # Create bubbles/buttons for each category
+    cols = st.columns(4)
+    categories = ["travel", "mystery", "historical-fiction", "classics"]
+
+    selected_category = None
+    for i, category in enumerate(categories):
+        col_idx = i % 4  # Distribute across columns
+        with cols[col_idx]:
+            if st.button(f"📖 {category}", key=f"cat_{category}"):
+                selected_category = category
+    
+    # Display books for selected category
+    if selected_category:
+        st.write(f"### Books in '{selected_category}' category")
+        category_books = df[df['category'] == selected_category]
+        
+        if category_books.empty:
+            st.warning(f"No books found in the '{selected_category}' category.")
+        else:
+            st.write(f"Found {len(category_books)} book(s) in this category:")
+            st.dataframe(
+                category_books[["title", "category", "price", "availability", "stock_count"]],
+                height=400,
+                use_container_width=True
+            )
+            
+            # Show some quick stats
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Average Price", f"£{category_books['price'].mean():.2f}")
+            with col2:
+                in_stock = category_books[category_books['availability'] == 'In stock']
+                st.metric("Books In Stock", len(in_stock))
+            with col3:
+                st.metric("Total Stock Count", category_books['stock_count'].sum())
     
 if __name__ == "__main__":
     main()

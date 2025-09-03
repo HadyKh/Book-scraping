@@ -29,6 +29,10 @@ class QuestionAnswerer:
         # Map questions to functions
         self.question_mapping()
     
+    def get_dataframe(self) -> pd.DataFrame:
+        """Return the loaded dataframe."""
+        return self.df
+    
     def get_questions(self):
         return [{"id": qid, "description": desc} for qid, (desc, _) in self.questions.items()]
         
