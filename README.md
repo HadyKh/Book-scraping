@@ -46,27 +46,6 @@ python src\preprocessing\data_loader.py
 # UI Initialization
 streamlit run src/app.py
 ```
-## 📁 Project Structure
-
-book-scraping/
-├── src/                         # Source code directory
-│   ├── app.py                   # Main Streamlit application
-│   ├── scraper/                 # Web scraping module
-│   │   ├── scraper.py           # Main scraping functionality
-│   │   └── Utils.py             # Utility functions for scraping
-│   ├── analysis/                # Data analysis and Q&A engine
-│   │   ├── qa_engine.py         # Main question answering engine
-│   │   ├── categorical.py       # Categorical question handlers
-│   │   ├── numerical.py         # Numerical question handlers
-│   │   └── hybrid.py            # Hybrid question handlers
-│   ├── data/                    # Data storage directory
-│   │   ├── books_data.csv       # Scraped book data (auto-generated)
-│   │   └── books_data.json      # [OPTIONAL] JSON format data (auto-generated)
-│   └── preprocessing/           # Data processing utilities
-│       └── data_loader.py       # Data loading and preprocessing (Skipped)
-├── requirements.txt             # Python dependencies
-├── run_app.bat                  # Windows auto-setup script
-└── README.md                    # Project documentation
 
 ## 📝 Notes
 - The application requires an internet connection to scrape fresh data
